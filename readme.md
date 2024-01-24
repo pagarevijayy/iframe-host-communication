@@ -10,3 +10,11 @@ Remember:
 - Update the allowed hosts inside the iframe project.
 - Update the iframe domain url inside the host projects as needed.
 
+
+To test without updating urls:
+
+```
+- Run iframe on port 5174, and host project on 5175 (i.e http://localhost:5175)
+- host-project-2 on http://127.0.0.1:5500
+```
+
