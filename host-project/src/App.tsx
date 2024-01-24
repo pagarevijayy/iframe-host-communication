@@ -3,15 +3,15 @@ import './App.css'
 
 function App() {
   const [iframeMessage, setIframeMessage] = useState("");
+  const iframeOrigin = useRef("http://localhost:5174"); // remember to update this value based on actual iframe url.
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   useEffect(() => {
     const iframeResponse = (event: any) => {
-      // remember: update the origin check value on project basis.
-      if (event.origin !== "http://localhost:5174") return; // only process messages coming from our iframe domain.
+      if (event.origin !== iframeOrigin.current) return; // only process messages coming from our iframe domain.
 
       if (event?.data?.targetSrc == 'my_iframe_custom_msg') {
-        console.log('iframe event', event);
+        console.log('on host:', event);
         setIframeMessage(event.data.message);
       }
     };
@@ -31,8 +31,7 @@ function App() {
       metadata: '...'
     }
     
-    // remember: to update the origin value on project basis.
-    iframeRef.current?.contentWindow?.postMessage(data, "http://localhost:5174") 
+    iframeRef.current?.contentWindow?.postMessage(data, iframeOrigin.current) 
   }
 
 
@@ -42,7 +41,7 @@ function App() {
       <button onClick={() => sendMessageToIframe()}>Sign a txn</button>
       <p>{iframeMessage}</p>
       <div>
-        <iframe ref={iframeRef} src="http://localhost:5174/" width="360" height="480"></iframe>
+        <iframe ref={iframeRef} src={iframeOrigin.current} width="360" height="480"></iframe>
       </div>
     </>
   )

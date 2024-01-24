@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Host Project 2</title>
+</head>
+
+<body>
+    <div id="app">
+        <h1>Host Project - 2</h1>
+        <p id="message"></p>
+        <button style="display: block; margin: 10px;" id="signTxn">Sign Txn</button>
+        <iframe src="http://localhost:5174/" width="360" height="480"></iframe>
+    </div>
+
+    <script>
+        // console.log('js implementation.')
+
+        const iframeOrigin = "http://localhost:5174"; // remember to update this value based on actual iframe url.
+        const button = document.querySelector("#signTxn");
+        const iframe = document.querySelector("iframe");
+        const message = document.querySelector("#message");
+
+        // send data to iframe
+        button.addEventListener("click", () => {
+            // console.log('btn implementation.', iframe)
+            const data = {
+                message: 'Approve and Verify Txn?',
+                targetSrc: 'my_host_custom_msg',
+                metadata: '...'
+            }
+
+            iframe.contentWindow.postMessage(data, iframeOrigin);
+        });
+
+        // listen data from iframe
+        window.addEventListener("message", (event) => {
+            // only process messages coming from our iframe domain.
+            if (event.origin !== iframeOrigin) return;
+
+            if (event?.data?.targetSrc == 'my_iframe_custom_msg') {
+                console.log('on host:', event);
+                message.innerHTML = event?.data?.message;
+            }
+        });
+
+    </script>
+
+</body>
+
+</html>

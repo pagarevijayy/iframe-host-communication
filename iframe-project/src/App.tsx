@@ -3,16 +3,18 @@ import { useEffect, useState } from "react";
 import './App.css'
 
 function App() {
+  const [currentParentOrigin, setCurrentParentOrigin]= useState("");
   const [parentMessage, setParentMessage] = useState("");
 
   useEffect(() => {
     const parentResponse = (event: any) => {
-      // remember: update the origin check value on project basis.
-      if (event.origin !== "http://localhost:5175") return; 
+      const allowedOrigins = ["http://localhost:5175", "http://127.0.0.1:5500"]; // remember to update the allowed origins.
+      if (!allowedOrigins.includes(event.origin)) return; 
 
       if (event?.data?.targetSrc == 'my_host_custom_msg') {
-        console.log('parent event', event);
-        setParentMessage(event.data.message);
+        console.log('inside iframe:', event);
+        setCurrentParentOrigin(event.origin);
+        setParentMessage(event.data.message); 
       }
     };
 
@@ -22,15 +24,13 @@ function App() {
 
   const sendMessageToParent = () => {
     // perform some logic and send necessary data to the iframe.
-
     const data = {
       message: 'Txn signed and approved!',
       targetSrc: 'my_iframe_custom_msg',
       metadata: '...'
     }
-    
-    // remember: to update the origin value on project basis.
-    window?.parent?.postMessage(data, "http://localhost:5175") 
+
+    window?.parent?.postMessage(data, currentParentOrigin); 
     setParentMessage("approved!"); //update state
   }
 
