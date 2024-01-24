@@ -8,7 +8,7 @@ function App() {
 
   useEffect(() => {
     const parentResponse = (event: any) => {
-      const allowedOrigins = ["http://localhost:5175", "http://127.0.0.1:5500"]; // remember to update the allowed origins.
+      const allowedOrigins = ["http://localhost:5174", "http://127.0.0.1:5500"]; // remember to update the allowed origins.
       if (!allowedOrigins.includes(event.origin)) return; 
 
       if (event?.data?.targetSrc == 'my_host_custom_msg') {

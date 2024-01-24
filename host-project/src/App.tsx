@@ -3,7 +3,7 @@ import './App.css'
 
 function App() {
   const [iframeMessage, setIframeMessage] = useState("");
-  const iframeOrigin = useRef("http://localhost:5174"); // remember to update this value based on actual iframe url.
+  const iframeOrigin = useRef("http://localhost:5173"); // remember to update this value based on actual iframe url.
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   useEffect(() => {

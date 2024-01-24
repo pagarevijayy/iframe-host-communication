@@ -14,7 +14,7 @@ Remember:
 To test without updating urls:
 
 ```
-- Run iframe on port 5174, and host project on 5175 (i.e http://localhost:5175)
+- Run iframe on port 5173, and host project on 5174 (i.e http://localhost:5174)
 - host-project-2 on http://127.0.0.1:5500
 ```
 
