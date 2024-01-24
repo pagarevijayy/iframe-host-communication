@@ -18,3 +18,7 @@ To test without updating urls:
 - host-project-2 on http://127.0.0.1:5500
 ```
 
+
+Command to make project run on a particular port:
+`npm run dev -- --port 5174`
+
