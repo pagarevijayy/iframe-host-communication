@@ -1,33 +1,49 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useEffect, useRef, useState } from "react";
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [iframeMessage, setIframeMessage] = useState("");
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+
+  useEffect(() => {
+    const iframeResponse = (event: any) => {
+      // remember: update the origin check value on project basis.
+      if (event.origin !== "http://localhost:5174") return; // only process messages coming from our iframe domain.
+
+      if (event?.data?.targetSrc == 'my_iframe_custom_msg') {
+        console.log('iframe event', event);
+        setIframeMessage(event.data.message);
+      }
+    };
+
+    window.addEventListener("message", iframeResponse);
+    return () => window.removeEventListener("message", iframeResponse);
+  }, []);
+
+  const sendMessageToIframe = () => {
+    // perform some logic and send necessary data to the iframe.
+    setIframeMessage(""); // update state
+
+
+    const data = {
+      message: 'Approve and Verify Txn?',
+      targetSrc: 'my_host_custom_msg',
+      metadata: '...'
+    }
+    
+    // remember: to update the origin value on project basis.
+    iframeRef.current?.contentWindow?.postMessage(data, "http://localhost:5174") 
+  }
+
 
   return (
     <>
+      <h1>Host Project</h1>
+      <button onClick={() => sendMessageToIframe()}>Sign a txn</button>
+      <p>{iframeMessage}</p>
       <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <iframe ref={iframeRef} src="http://localhost:5174/" width="360" height="480"></iframe>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
   )
 }
