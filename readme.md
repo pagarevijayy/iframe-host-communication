@@ -14,7 +14,7 @@ Remember:
 To test without updating urls:
 
 ```
-- Run iframe on port 5173, and host project on 5174 (i.e http://localhost:5174)
+- Run iframe on port 5173, and host project on 5174 (i.e http://localhost:5174) i.e run npm dev first for iframe and then for host.
 - host-project-2 on http://127.0.0.1:5500
 ```
 
